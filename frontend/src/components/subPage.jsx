@@ -15,6 +15,8 @@ function SubPage({page}) {
     const [loading, setLoading] = useState(true)
     useEffect(()=>{
         getPageData()
+    },[])
+    const getVersion = ()=>{
         axios({
             method: 'get',
             url: `${baseurl}/healthz`,
@@ -24,7 +26,7 @@ function SubPage({page}) {
         }).catch((err)=>{
             console.error('Healthz error:', err);
         })
-    },[])
+    }
     const getPageData = (id)=>{
         let config = {
             method: 'get',
@@ -60,6 +62,7 @@ function SubPage({page}) {
                 Toast({ type: 'error', message: err.message || 'Something went wrong' })
             }).finally(()=>{
                 setLoading(false)
+                setTimeout(()=>{getVersion()}, 3000)
             })
     }
 
