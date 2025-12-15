@@ -10,8 +10,6 @@ import Link from "next/link";
 
 const baseurl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-console.log(hi);
-
 export default function Layout({ children }) {
   const pathname = usePathname();
   const [userData, setUserData] = useState(null);

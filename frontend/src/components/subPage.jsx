@@ -1,22 +1,37 @@
 'use client'
 // import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import Image from "next/image";
 import axios from 'axios';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Sitemap from '../components/Sitemap';
+import { Toast } from '../components/Toast/index.jsx';
+
 const baseurl = process.env.NEXT_PUBLIC_API_BASE_URL;
 function SubPage({page}) {
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
+    const [loading, setLoading] = useState(true)
     useEffect(()=>{
         getPageData()
+        axios({
+            method: 'get',
+            url: `${baseurl}/healthz`,
+        }).then(async (response) => {
+            console.log('Healthz response:', response.data);
+            Toast({ message: `version: ${response.data.version}` })
+        }).catch((err)=>{
+            console.error('Healthz error:', err);
+        })
     },[])
     const getPageData = (id)=>{
         let config = {
             method: 'get',
             url: `${baseurl}/api/get-page-data`,
         };
+        const toastInst = Toast({ type: 'loading', message: 'Loading...' });
+        setLoading(true)
         axios(config)
             .then(async (response) => {
                 let tmp_data = {}
@@ -38,10 +53,13 @@ function SubPage({page}) {
                     setTitle(tmp_data["privacy-title"])
                     setContent(tmp_data["privacy-title"])
                 }
+                toastInst.close()
             })
             .catch((err)=>{
-                console.log(err)
-
+                toastInst.close()
+                Toast({ type: 'error', message: err.message || 'Something went wrong' })
+            }).finally(()=>{
+                setLoading(false)
             })
     }
 
@@ -68,13 +86,14 @@ function SubPage({page}) {
                     <div className="sub-page-title">
                         {title}
                     </div>
-                    <div className="contain">
-
-                        <div style={{display:"flex"}}>
-                            <p>{content}</p>
+                    {loading ? <p style={{textAlign: 'center'}}>Loading...</p> :
+                        content ? <div className="contain">
+                            <div style={{display:"flex"}}>
+                                <p>{content}</p>
+                            </div>
                         </div>
-
-                    </div>
+                    : <p style={{textAlign: 'center'}}>No Data Available</p>
+                    }
                 </section>
             </div>
             <Sitemap/>

@@ -1,0 +1,133 @@
+.toast-instance-root {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+}
+.toast-portal {
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.toast {
+	pointer-events: auto;
+	display: flex;
+	align-items: center;
+    flex-direction: column;
+	background: rgba(0,0,0,0.65);
+	color: #fff;
+	border-radius: 10px;
+	padding: 16px 16px 24px 16px;
+	width: 40vw;
+	animation: slideUp 260ms ease-out;
+}
+
+.toast-icon {
+	min-width: 40px;
+	min-height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-weight: 700;
+	border-radius: 8px;
+	margin: 0 8px 0 8px;
+	flex-shrink: 0;
+    &:empty {
+        display: none;
+    }
+}
+
+.toast-body {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+.toast-message {
+	font-size: 14px;
+	line-height: 1.25;
+	word-break: break-word;
+    text-align: center;
+}
+
+.toast-close {
+	background: transparent;
+	border: none;
+	color: #6b7280;
+	font-size: 18px;
+	padding: 6px 8px;
+	cursor: pointer;
+	border-radius: 6px;
+	margin-left: 8px;
+}
+
+.toast-close:focus {
+	outline: 2px solid rgba(59,130,246,0.25);
+}
+
+.toast-progress {
+	height: 4px;
+	width: 100%;
+	border-radius: 4px;
+	transition: width 60ms linear;
+	align-self: stretch;
+	overflow: hidden;
+}
+
+/* indeterminate (loading) progress */
+.toast-progress.indeterminate {
+	position: relative;
+	background: rgba(255,255,255,0.08);
+}
+
+.toast-progress.indeterminate::before {
+	content: "";
+	position: absolute;
+	left: -40%;
+	top: 0;
+	height: 100%;
+	width: 40%;
+	background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+	animation: indeterminate 1s linear infinite;
+}
+
+@keyframes indeterminate {
+	from {
+		transform: translateX(0%);
+	}
+	to {
+		transform: translateX(250%);
+	}
+}
+
+/* spinner */
+.toast-spinner {
+	animation: spin 1s linear infinite;
+}
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes slideUp {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
